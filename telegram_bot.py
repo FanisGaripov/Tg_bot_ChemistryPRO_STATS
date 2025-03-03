@@ -1,6 +1,7 @@
 import telebot
 import requests
 from background import keep_alive, app
+import datetime
 
 
 botTimeWeb = telebot.TeleBot('7923775487:AAFq_Qyh5WzRWnus8iR3dCh4LxmPuRR7da4')
@@ -31,7 +32,7 @@ def handle_message(message):
         # Запрос статистики за сегодня
         OAUTH_TOKEN = 'y0__xDh3sSaAhj80zUg1diVtRIzlCiJwXpDSdjc3xB4FPlq75vD_w'
         COUNTER_ID = '99820869'
-        date_today = '2025-03-01'  # Замените на текущую дату
+        date_today = str(datetime.datetime.now())[0:10]
 
         # URL для запроса к API Яндекс.Метрики
         API_URL = f'https://api-metrika.yandex.net/stat/v1/data'
@@ -60,8 +61,8 @@ def handle_message(message):
             stats_message = "Статистика за сегодня:\n"
             for item in data['data']:
                 stats_message += (f"Дата: {item['dimensions'][0]['name']}, "
-                                  f"Посещения: {item['metrics'][0]}, "
-                                  f"Просмотры страниц: {item['metrics'][1]}\n")
+                                  f"Посещения: {int(item['metrics'][0])}, "
+                                  f"Просмотры страниц: {int(item['metrics'][1])}\n")
                 visits += int(item['metrics'][0])
                 views += int(item['metrics'][1])
             botTimeWeb.send_message(message.chat.id, stats_message)
@@ -72,8 +73,13 @@ def handle_message(message):
                       f"Всего просмотров страниц: {int(views)}"
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         markup.add(types.KeyboardButton("Назад"))  # Кнопка "Назад"
-        markup.add(types.InlineKeyboardButton("Перейти на сайт", url="https://chemistrypro.onrender.com/"))
+
+        # Отправляем сообщение с текстом и кнопкой "Назад"
         botTimeWeb.send_message(message.chat.id, second_mess, reply_markup=markup)
+        # Отправляем инлайн кнопку отдельно
+        botTimeWeb.send_message(message.chat.id, "Перейдите на сайт:", reply_markup=types.InlineKeyboardMarkup().add(
+            types.InlineKeyboardButton("Перейти на сайт", url="https://chemistrypro.onrender.com/")
+        ))
 
     elif message.text == "Назад":
         startBot(message)
@@ -115,8 +121,8 @@ def get_dates(message):
             stats_message = "Статистика:\n"
             for item in data['data']:
                 stats_message += (f"Дата: {item['dimensions'][0]['name']}, "
-                                  f"Посещения: {item['metrics'][0]}, "
-                                  f"Просмотры страниц: {item['metrics'][1]}\n")
+                                  f"Посещения: {int(item['metrics'][0])}, "
+                                  f"Просмотры страниц: {int(item['metrics'][1])}\n")
                 visits += int(item['metrics'][0])
                 views += int(item['metrics'][1])
             botTimeWeb.send_message(message.chat.id, stats_message)
@@ -127,9 +133,15 @@ def get_dates(message):
                       f"Всего просмотров страниц: {int(views)}"
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         markup.add(types.KeyboardButton("Назад"))  # Кнопка "Назад"
-        markup.add(types.InlineKeyboardButton("Перейти на сайт", url="https://chemistrypro.onrender.com/"))
-        botTimeWeb.send_message(message.chat.id, second_mess, reply_markup=markup)
 
+        # Отправляем сообщение с текстом и кнопкой "Назад"
+        botTimeWeb.send_message(message.chat.id, second_mess, reply_markup=markup)
+        # Отправляем инлайн кнопку отдельно
+        botTimeWeb.send_message(message.chat.id, "Перейдите на сайт:", reply_markup=types.InlineKeyboardMarkup().add(
+            types.InlineKeyboardButton("Перейти на сайт", url="https://chemistrypro.onrender.com/")
+        ))
+
+    
     except Exception as e:
         botTimeWeb.send_message(message.chat.id,
                                 "Ошибка при вводе дат. Пожалуйста, попробуйте еще раз в формате (гггг-мм-дд, гггг-мм-дд).")
