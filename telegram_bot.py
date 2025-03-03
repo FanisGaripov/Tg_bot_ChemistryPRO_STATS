@@ -1,5 +1,7 @@
 import telebot
 import requests
+from background import keep_alive, app
+
 
 botTimeWeb = telebot.TeleBot('7923775487:AAFq_Qyh5WzRWnus8iR3dCh4LxmPuRR7da4')
 
@@ -133,4 +135,5 @@ def get_dates(message):
                                 "Ошибка при вводе дат. Пожалуйста, попробуйте еще раз в формате (гггг-мм-дд, гггг-мм-дд).")
 
 
+keep_alive()
 botTimeWeb.infinity_polling()
