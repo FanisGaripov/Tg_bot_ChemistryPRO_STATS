@@ -2,9 +2,13 @@ import telebot
 import requests
 from background import keep_alive, app
 import datetime
+from dotenv import load_dotenv
+import os
 
 
-botTimeWeb = telebot.TeleBot('7923775487:AAFq_Qyh5WzRWnus8iR3dCh4LxmPuRR7da4')
+load_dotenv()
+
+botTimeWeb = telebot.TeleBot(os.getenv('TG_TOKEN'))
 
 from telebot import types
 
@@ -30,7 +34,7 @@ def handle_message(message):
 
     elif message.text == "За сегодня":
         # Запрос статистики за сегодня
-        OAUTH_TOKEN = 'y0__xDh3sSaAhj80zUg1diVtRIzlCiJwXpDSdjc3xB4FPlq75vD_w'
+        OAUTH_TOKEN = os.getenv('YANDEX_TOKEN')
         COUNTER_ID = '99820869'
         date_today = str(datetime.datetime.now())[0:10]
 
@@ -91,7 +95,7 @@ def get_dates(message):
         views = 0
         date1, date2 = map(str.strip, message.text.split(','))
 
-        OAUTH_TOKEN = 'y0__xDh3sSaAhj80zUg1diVtRIzlCiJwXpDSdjc3xB4FPlq75vD_w'
+        OAUTH_TOKEN = os.getenv('YANDEX_TOKEN')
         COUNTER_ID = '99820869'
 
         # URL для запроса к API Яндекс.Метрики
